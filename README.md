@@ -1,1 +1,1 @@
-# ProjG7
+# Pac-man on an Arduino mega board
