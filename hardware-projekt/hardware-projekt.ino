@@ -160,7 +160,7 @@ void clearOut(){
 
   if(maze[row][col]==2){
     maze[row][col]=0; // updating the maze  
-    TFT_fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE, BLACK);//updating the visuals
+    tft.fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE, BLACK);//updating the visuals
     score++;
   }
  }
