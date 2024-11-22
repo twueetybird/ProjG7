@@ -122,13 +122,13 @@ void drawMaze() {
 
             if (maze[row][col] == 1) {
                 // Draw a wall (blue rectangle)
-                TFT_fillRect(x, y, CELL_SIZE, CELL_SIZE, BLUE);
+                tft.fillRect(x, y, CELL_SIZE, CELL_SIZE, BLUE);
             } else if (maze[row][col] == 2) {
                 // Draw a pellet (white circle)
-                TFT_fillCircle(x + CELL_SIZE / 2, y + CELL_SIZE / 2, 5, WHITE); //since it should be placed in the center it is cellsize/2 , the 5 shows radius, we can change that based on how big it should be. 
+                tft.fillCircle(x + CELL_SIZE / 2, y + CELL_SIZE / 2, 5, WHITE); //since it should be placed in the center it is cellsize/2 , the 5 shows radius, we can change that based on how big it should be. 
             } else {
                 // Draw an empty space (black rectangle)
-                TFT_fillRect(x, y, CELL_SIZE, CELL_SIZE, BLACK);
+                tft.fillRect(x, y, CELL_SIZE, CELL_SIZE, BLACK);
             }
         }
     }
@@ -140,12 +140,12 @@ int pacManY= 0 ;
 
 //Drawing the man obviously 
 void drawPacman(){
-  TFT_fillCircle(pacManX + CELL_SIZE / 2 , pacManY + CELL_SIZE / 2 , 10 , YELLOW);
+  tft.fillCircle(pacManX + CELL_SIZE / 2 , pacManY + CELL_SIZE / 2 , 10 , YELLOW);
 }
 
 //clearing the place where the man has been visually 
 void clearOut(){
-  TFT_fillCircle(pacManX + CELL_SIZE / 2 , pacManY + CELL_SIZE / 2 , CELL_SIZE , BLACK);
+  tft.fillCircle(pacManX + CELL_SIZE / 2 , pacManY + CELL_SIZE / 2 , CELL_SIZE , BLACK);
 
 }
  
