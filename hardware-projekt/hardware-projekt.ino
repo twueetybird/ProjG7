@@ -14,8 +14,6 @@ const int TS_LEFT = 907, TS_RT = 136, TS_TOP = 942, TS_BOT = 139;
 
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 
-Adafruit_GFX_Button on_btn, off_btn;
-
 int pixel_x, pixel_y; //Touch_getXY() updates global vars
 bool Touch_getXY(void)
 {
