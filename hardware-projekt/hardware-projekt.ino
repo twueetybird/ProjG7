@@ -1,9 +1,7 @@
-#if 1
-
 #include <Adafruit_GFX.h> //library used for drawing shapes 
 #include <MCUFRIEND_kbv.h> //library used for the screen 
-MCUFRIEND_kbv tft;
 #include <TouchScreen.h> //library for touch screen idk if we need it
+MCUFRIEND_kbv tft;
 
 //defines max and min pressure for pressing (again idk if it is needed) 
 #define MINPRESSURE 200 
@@ -54,45 +52,7 @@ int buttonState; //is the button pushed (is this for staring the game?)
 //speaker
 const int SPEAKER= 29;
 
-void setup(void)
-{
-Serial.begin(9600);
-uint16_t ID = tft.readID();
-Serial.print("TFT ID = 0x");
-Serial.println(ID, HEX);
-Serial.println("Calibrate for your Touch Panel");
-if (ID == 0xD3D3) ID = 0x9486; // write-only shield
-tft.begin(ID);
-tft.setRotation(0); //PORTRAIT
-tft.fillScreen(BLACK);
-on_btn.initButton(&tft, 60, 200, 100, 40, WHITE, CYAN, BLACK, "ON", 2);
-off_btn.initButton(&tft, 180, 200, 100, 40, WHITE, CYAN, BLACK, "OFF", 2);
-on_btn.drawButton(false);
-off_btn.drawButton(false);
-tft.fillRect(40, 80, 160, 80, RED);
-}
 
-/* two buttons are quite simple
-*/
-void loop(void)
-{
-bool down = Touch_getXY();
-on_btn.press(down && on_btn.contains(pixel_x, pixel_y));
-off_btn.press(down && off_btn.contains(pixel_x, pixel_y));
-if (on_btn.justReleased())
-on_btn.drawButton();
-if (off_btn.justReleased())
-off_btn.drawButton();
-if (on_btn.justPressed()) {
-on_btn.drawButton(true);
-tft.fillRect(40, 80, 160, 80, GREEN);
-}
-if (off_btn.justPressed()) {
-off_btn.drawButton(true);
-tft.fillRect(40, 80, 160, 80, RED);
-}
-}
-#endif
 
 // drawing the maze for the game:
 
