@@ -52,7 +52,27 @@ int buttonState; //is the button pushed (is this for staring the game?)
 //speaker
 const int SPEAKER= 29;
 
+void setup() {
+    Serial.begin(9600);
+    uint16_t ID = tft.readID();
+    tft.begin(ID);
+    tft.setRotation(1); // LANDSCAPE
+    tft.fillScreen(BLACK);
 
+    pinMode(buttonPin, INPUT_PULLUP);
+    pinMode(SPEAKER, OUTPUT);
+
+    drawMaze();
+    drawPacman();
+}
+
+void loop() {
+    // Joystick input
+    xVal = analogRead(xPin);
+    yVal = analogRead(yPin);
+    buttonState = digitalRead(buttonPin);
+
+}
 
 // drawing the maze for the game:
 
