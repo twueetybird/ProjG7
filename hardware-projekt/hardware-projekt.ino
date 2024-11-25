@@ -149,6 +149,7 @@ void clearOut(){
     maze[row][col]=0; // updating the maze  
     tft.fillRect(row*CELL_SIZE, col*CELL_SIZE, CELL_SIZE, CELL_SIZE, BLACK);//updating the visuals
     score++;
+    scoreDisplay();
   }
  }
 
