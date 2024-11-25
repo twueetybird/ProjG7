@@ -169,7 +169,15 @@ void startGame() {
     if (!gameStarted) { // Check if the game has not already started
         gameStarted = true; // Set the gameStarted flag
         score = 0; // Reset score
-        pacManX = pacManY = 0; // Reset Pac-Man's position
+        
+        // Set fixed starting position for Pac-Man (ensure it's a valid empty space)
+        pacManX = 1 * CELL_SIZE;  // Column 1 (second column)
+        pacManY = 1 * CELL_SIZE;  // Row 1 (second row)
+
+        // Check that the starting position is not a wall (value 1 in the maze)
+        int row = pacManY / CELL_SIZE;
+        int col = pacManX / CELL_SIZE;
+
         ghostX = CELL_SIZE * 6; // Reset ghost's position
         ghostY = CELL_SIZE * 4;
 
@@ -234,9 +242,9 @@ void drawPacman(){
 
 //clearing the place where the man has been visually 
 void clearOut(){
- tft.fillCircle(pacManX + CELL_SIZE / 2 , pacManY + CELL_SIZE / 2 , CELL_SIZE , BLACK);
-
+  tft.fillCircle(pacManX + CELL_SIZE / 2, pacManY + CELL_SIZE / 2, 10, BLACK);  // Clearing the small circle
 }
+
 
 //drawing the ghost
 void drawGhost(){
@@ -293,10 +301,10 @@ void moveGhost(){
 void checkGhostCollision() {
   if (pacManX == ghostX && pacManY == ghostY) {
     // Play lose sound
-    tft.setCursor(50, 150);
+    tft.setCursor(180, 100);
     tft.setTextColor(RED);
     tft.setTextSize(2);
-    tft.print("Game Over!");
+    tft.print("GAME OVER!");
     gameStarted = false;
   }
 }
@@ -374,6 +382,7 @@ void movePacWJoy() {
         lastMoveTime = currentTime;
     }
 }
+
 
 
 
