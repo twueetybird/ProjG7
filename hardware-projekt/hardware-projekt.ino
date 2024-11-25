@@ -318,52 +318,62 @@ void checkGhostCollision() {
 unsigned int lastMoveTime = 0; //shows the last time pac moved (it is unsigned, ang gets updated to current time as we go)
 const int moveInterval = 200; //it has 200ms reaction time (so if you move it too fast it wont reat) , we can change this time (the lower it gets the faster it reacts)
 
-void movePacWJoy(){
+void movePacWJoy() {
+    unsigned int currentTime = millis(); // Measures the current time
 
-unsigned int currentTime = millis(); //measures the current move time, by calling the function millis
+    if (currentTime - lastMoveTime > moveInterval) {
+        // Get joystick values
+        xVal = analogRead(xPin);
+        yVal = analogRead(yPin);
 
-//if it is within the reactiontime
- if(currentTime-lastMoveTime>moveInterval){
+        // Debugging joystick input values
+        Serial.print("X: ");
+        Serial.print(xVal);
+        Serial.print(" | Y: ");
+        Serial.println(yVal);
 
-  //get rid of the pac visually  and get ready for moving it further
+        // Clear the previous position of Pac-Man
+        clearOut();
 
-  clearOut();
+        int newPacManX = pacManX;
+        int newPacManY = pacManY;
 
-  if(xVal<400){
+        // Determine the new position based on joystick input
+        if (xVal < 400) {
+            newPacManX -= CELL_SIZE;  // Move left
+        } else if (xVal > 600) {
+            newPacManX += CELL_SIZE;  // Move right
+        }
 
-    pacManX-=CELL_SIZE; //move left, if in doubt look at the pic i uploaded in the doc
+        if (yVal < 400) {
+            newPacManY -= CELL_SIZE;  // Move up
+        } else if (yVal > 600) {
+            newPacManY += CELL_SIZE;  // Move down
+        }
 
-  } else if (xVal>600){
+        // Convert Pac-Man's new coordinates to row/column in the maze
+        int newRow = newPacManY / CELL_SIZE;
+        int newCol = newPacManX / CELL_SIZE;
 
-    pacManX+=CELL_SIZE;
+        // Check if the new position is within the bounds of the maze and not a wall
+        if (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS) {
+            if (maze[newRow][newCol] != 1) {  // 1 is the wall
+                // Update Pac-Man's position if not a wall
+                pacManX = newPacManX;
+                pacManY = newPacManY;
+            }
+        }
 
-  }
+        // Redraw Pac-Man at the new position
+        drawPacman();
 
-  if(yVal<400){
+        // Track score if Pac-Man collects a pellet
+        trackingScores();
 
-    pacManY-=CELL_SIZE;
-
-  } else if (yVal>600){
-
-    pacManY+=CELL_SIZE;
-  }
- }
-
-
-  //boundry checks so that it doesnt move out of the rows and cols: 
-  //pacmans position (x or y), should be a number between 0 and (cols/rows * pixels in each cell), (-1 is there  beacause we count from 0 ofc:))
-  constrain(pacManX, 0 , (COLS-1)*CELL_SIZE);
-  constrain(pacManY, 0 , (ROWS-1)*CELL_SIZE);
-
-  //draw him in the new pos
-  trackingScores();
-  drawPacman();
-
-  //the last movement time, should be updated to the new movement time
-  lastMoveTime=currentTime; 
-
-
- }
+        // Update the last movement time
+        lastMoveTime = currentTime;
+    }
+}
 
 
 
