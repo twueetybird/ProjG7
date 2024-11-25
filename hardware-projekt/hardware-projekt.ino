@@ -62,6 +62,7 @@ void setup() {
 
     drawMaze();
     drawPacman();
+    scoreDisplay();
 }
 
 void loop() {
