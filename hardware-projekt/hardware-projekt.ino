@@ -78,11 +78,15 @@ pinMode(buttonPin, INPUT_PULLUP);
   // the button is connected to a pullup resistor, meaning that, when not pressed the value is high, this means, that when you press it the value will be low (hence FALLING)
 
   attachInterrupt(digitalPinToInterrupt(buttonPin), startGame, FALLING);
-  drawMaze();
-  tft.setCursor(50, 100);
+  tft.fillScreen(BLACK);
+  tft.setCursor(50, 100); // Set cursor for the first line
   tft.setTextColor(WHITE);
   tft.setTextSize(2);
-  tft.print("Press the button to start the game.");
+  tft.print("Press the button");
+
+  tft.setCursor(50, 120); // Adjust Y-coordinate for the second line
+  tft.print("to start the game.");
+
 
 }
 
@@ -117,10 +121,13 @@ void loop(void){
   } else {
 
     //tells the player to press the button so it starts 
-    tft.setCursor(50, 100);
+    tft.setCursor(50, 150);
     tft.setTextColor(WHITE);
     tft.setTextSize(2);
-    tft.print("Please press the button in order to start/restart the game.");
+    tft.print("Please press the button in order");
+
+    tft.setCursor(50, 180);
+    tft.print("to start/restart the game.");
   }
 
  
