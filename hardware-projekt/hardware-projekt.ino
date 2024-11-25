@@ -1,11 +1,17 @@
 #include <Adafruit_GFX.h> //library used for drawing shapes 
 #include <MCUFRIEND_kbv.h> //library used for the screen 
+#include <TouchScreen.h> //library used for touchscreen
 MCUFRIEND_kbv tft;
 
 // ALL Touch panels and wiring is DIFFERENT
 // copy-paste results from TouchScreen_Calibr_native.ino
 const int XP = 6, XM = A2, YP = A1, YM = 7; //ID=0x9341
 
+//touchscreen
+TouchScreen ts = TouchScreen(6, A1, A2, 7, 300);
+#define MINPRESSURE 200
+#define MAXPRESSURE 1000
+const int TS_LEFT = 907, TS_RT = 136, TS_TOP = 942, TS_BOT = 139;
 
 int pixel_x, pixel_y; //Touch_getXY() updates global vars
 bool Touch_getXY(void)
