@@ -120,6 +120,14 @@ int pacManY= 0 ;
 void drawPacman(){
   tft.fillCircle(pacManX + CELL_SIZE / 2 , pacManY + CELL_SIZE / 2 , 10 , YELLOW);
 }
+//score display
+void scoreDisplay() {
+tft.setTextColor(WHITE, BLACK);
+tft.setCursor(10, tft.height() - 20);
+tft.print("score: ");
+tft.print(score);
+}
+
 
 //clearing the place where the man has been visually 
 void clearOut(){
