@@ -44,7 +44,12 @@ int yPin= A9;
 int buttonPin = 23;
 int xVal;  // how far is x axis
 int yVal; //how far is y axis
-int buttonState; //is the button pushed (is this for staring the game?)
+int buttonState; //is the button pushed (is this for starting the game?)
+
+bool buttonPressed = false;  // Flag to track if button is pressed
+bool lastButtonState = HIGH;  // Last button state (using INPUT_PULLUP, HIGH means button not pressed)
+unsigned long lastDebounceTime = 0;  // Last time button state changed
+unsigned long debounceDelay = 50;  // debounce delay time (in milliseconds)
 
 #define CELL_SIZE 40
 
@@ -90,7 +95,29 @@ pinMode(buttonPin, INPUT_PULLUP);
 
 }
 
-void loop(void){
+void loop() {
+   // Debounced button press detection logic
+  int currentButtonState = digitalRead(buttonPin);
+
+  // Check if the button state has changed (HIGH to LOW or LOW to HIGH)
+  if (currentButtonState != lastButtonState) {
+    // Reset debounce timer
+    lastDebounceTime = millis();
+  }
+
+  // If enough time has passed since the last state change, proceed
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    // If the button was pressed (button is LOW) and the game hasn't started yet
+    if (currentButtonState == LOW && !buttonPressed) {
+      Serial.println("Button Pressed");
+      startGame();  // Call the function to start the game
+      buttonPressed = true; // Set flag to prevent repeated prints
+    } 
+    // If the button is released (button is HIGH), reset flag to detect the next press
+    else if (currentButtonState == HIGH) {
+      buttonPressed = false;
+    }
+  }
 
   
 
