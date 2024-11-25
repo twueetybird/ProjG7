@@ -3,6 +3,7 @@
 #include <TouchScreen.h> //library used for touchscreen
 MCUFRIEND_kbv tft;
 
+
 // ALL Touch panels and wiring is DIFFERENT
 // copy-paste results from TouchScreen_Calibr_native.ino
 const int XP = 6, XM = A2, YP = A1, YM = 7; //ID=0x9341
@@ -44,12 +45,14 @@ int yPin= A9;
 int buttonPin = 23;
 int xVal;  // how far is x axis
 int yVal; //how far is y axis
-int buttonState; //is the button pushed (is this for starting the game?)
+int buttonState; //is the button pushed (is this for staring the game?)
 
 bool buttonPressed = false;  // Flag to track if button is pressed
 bool lastButtonState = HIGH;  // Last button state (using INPUT_PULLUP, HIGH means button not pressed)
 unsigned long lastDebounceTime = 0;  // Last time button state changed
 unsigned long debounceDelay = 50;  // debounce delay time (in milliseconds)
+//interrupt 
+volatile bool gameStarted = false;  // indicate if the game has started
 
 #define CELL_SIZE 40
 
@@ -59,10 +62,6 @@ int score = 0; // Track score
 
 //speaker
 const int SPEAKER= 29;
-
-//interrupt 
-volatile bool gameStarted = false;  // indicate if the game has started
-
 
 void setup(void){
 
@@ -96,7 +95,7 @@ pinMode(buttonPin, INPUT_PULLUP);
 }
 
 void loop() {
-   // Debounced button press detection logic
+ // Debounced button press detection logic
   int currentButtonState = digitalRead(buttonPin);
 
   // Check if the button state has changed (HIGH to LOW or LOW to HIGH)
@@ -118,6 +117,9 @@ void loop() {
       buttonPressed = false;
     }
   }
+
+lastButtonState = currentButtonState;
+
 
   
 
@@ -164,19 +166,24 @@ void loop() {
 
 //the function that gets called inside of the interrupt (by using this function we dont need to check if the button is pressed everytime in the main loop, it gets checked everytime here inside the loop)
 void startGame() {
-  if (!gameStarted) {
-    gameStarted = true;
-    score = 0;
-    pacManX = pacManY = 0; //reset pac
-    ghostX = CELL_SIZE * 6; // Reset ghost position
-    ghostY = CELL_SIZE * 4;
-    tft.fillScreen(BLACK);
-    drawMaze();
-    drawPacman();
-    Serial.println("Game Started!");
-    
-  }
+    if (!gameStarted) { // Check if the game has not already started
+        gameStarted = true; // Set the gameStarted flag
+        score = 0; // Reset score
+        pacManX = pacManY = 0; // Reset Pac-Man's position
+        ghostX = CELL_SIZE * 6; // Reset ghost's position
+        ghostY = CELL_SIZE * 4;
+
+        // Clear the screen to remove any text or graphics
+        tft.fillScreen(BLACK);
+
+        // Draw the initial maze and characters
+        drawMaze();
+        drawPacman();
+        
+        Serial.println("Game Started!");
+    }
 }
+
 
 
 // drawing the maze for the game:
@@ -357,7 +364,6 @@ unsigned int currentTime = millis(); //measures the current move time, by callin
 
 
  }
-
 
 
 
