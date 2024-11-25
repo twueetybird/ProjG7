@@ -46,6 +46,12 @@ int xVal;  // how far is x axis
 int yVal; //how far is y axis
 int buttonState; //is the button pushed (is this for staring the game?)
 
+#define CELL_SIZE 40
+
+int pacManX = 0, pacManY = 0; // Pac-Man's position
+int ghostX = CELL_SIZE * 6, ghostY = CELL_SIZE * 4; // Ghost's initial position
+int score = 0; // Track score
+
 //speaker
 const int SPEAKER= 29;
 
@@ -179,9 +185,6 @@ void drawMaze() {
     }
 }
 
-//drawing the pacman 
-int pacManX = 0;
-int pacManY= 0 ; 
 
 //Drawing the man obviously 
 void drawPacman(){
@@ -193,10 +196,6 @@ void clearOut(){
  tft.fillCircle(pacManX + CELL_SIZE / 2 , pacManY + CELL_SIZE / 2 , CELL_SIZE , BLACK);
 
 }
-
-//ghost (if we want to make more ghosts, we should add more to this)
-int ghostX =  CELL_SIZE * 6; //col 6
-int ghostY = CELL_SIZE * 4; //row 4
 
 //drawing the ghost
 void drawGhost(){
@@ -264,7 +263,6 @@ void checkGhostCollision() {
 
 
 //tracking score
- int score = 0 ;
  void trackingScores(){
  int row = pacManX/CELL_SIZE;
  int col = pacManY/CELL_SIZE;
