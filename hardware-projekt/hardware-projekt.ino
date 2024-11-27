@@ -301,6 +301,7 @@ void moveGhost(){
 void checkGhostCollision() {
   if (pacManX == ghostX && pacManY == ghostY) {
     // Play lose sound
+    tft.fillScreen(BLACK);
     tft.setCursor(180, 100);
     tft.setTextColor(RED);
     tft.setTextSize(2);
