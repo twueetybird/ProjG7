@@ -1,7 +1,13 @@
 #include <Adafruit_GFX.h> //library used for drawing shapes 
 #include <MCUFRIEND_kbv.h> //library used for the screen 
 #include <TouchScreen.h> //library used for touchscreen
+#include <LiquidCrystal.h> //this is for the second display we used 
 MCUFRIEND_kbv tft;
+
+LiquidCrystal lcd(25, 27, 35, 33, 31, 29);
+
+int time = 0;//this is for testing the screen 
+
 
 
 // ALL Touch panels and wiring is DIFFERENT
@@ -39,6 +45,8 @@ return pressed;
 #define YELLOW 0xFFE0
 #define WHITE 0xFFFF
 
+
+
 //joystick
 int xPin = A8;
 int yPin= A9;
@@ -64,6 +72,10 @@ int score = 0; // Track score
 const int SPEAKER= 29;
 
 void setup(void){
+
+  lcd.begin(16, 2);
+  lcd.setCursor(0,0);
+  lcd.print("Time:");
 
 //joystick 
 
@@ -95,6 +107,7 @@ pinMode(buttonPin, INPUT_PULLUP);
 }
 
 void loop() {
+
  // Debounced button press detection logic
   int currentButtonState = digitalRead(buttonPin);
 
@@ -116,6 +129,7 @@ void loop() {
     else if (currentButtonState == HIGH) {
       buttonPressed = false;
     }
+
   }
 
 lastButtonState = currentButtonState;
@@ -145,6 +159,11 @@ lastButtonState = currentButtonState;
   trackingScores(); 
   moveGhost();
   checkGhostCollision();
+
+  lcd.setCursor(0,1);
+  lcd.print(time);
+  
+  time++;
   
 
   } else {
@@ -158,6 +177,12 @@ lastButtonState = currentButtonState;
     tft.setCursor(50, 180);
     tft.print("to start/restart the game.");
   }
+
+  //this is for the second screen 
+  lcd.setCursor(0,1);
+  lcd.print(time);
+  //delay (1000);
+  time++;
 
  
 
@@ -385,6 +410,20 @@ void movePacWJoy() {
 }
 
 
+
+
+
+
+
+
+ 
+
+
+ //things we need to do :
+ //for the joystick add interupt so that the game only starts when the buttonstate is on 
+ //making ghosts and moving them
+ //detecting collison and losing game
+ //can it be potentially done with i2c? 
 
 
 
