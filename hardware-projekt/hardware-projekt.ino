@@ -69,7 +69,7 @@ int ghostX = CELL_SIZE * 6, ghostY = CELL_SIZE * 4; // Ghost's initial position
 int score = 0; // Track score
 
 //speaker
-const int SPEAKER = 29;
+const int SPEAKER = 53;
 
 #DEFINE NOTE_C 65
 
