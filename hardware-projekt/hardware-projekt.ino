@@ -421,11 +421,7 @@ void movePacWJoy() {
  
 
 
- //things we need to do :
- //for the joystick add interupt so that the game only starts when the buttonstate is on 
- //making ghosts and moving them
- //detecting collison and losing game
- //can it be potentially done with i2c? 
+
 
 
 
