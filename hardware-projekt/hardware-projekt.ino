@@ -41,6 +41,9 @@ int score = 0; // Track score
 //speaker
 const int SPEAKER= 29;
 
+//level 
+int level=1;
+
 
 
 
@@ -113,6 +116,7 @@ void loop() {
 
  lastButtonState = currentButtonState;
 
+  
   if(gameStarted){
   //joystick
   xVal= analogRead(xPin);
@@ -139,17 +143,11 @@ void loop() {
   checkGhostCollision();
 
   if (wonGame()) {
+
       tone(SPEAKER, 700, 1000); // Play a winning sound
-      tft.setCursor(50, 150);
-      tft.setTextColor(GREEN);
-      tft.setTextSize(2);
       tft.print("You Win!");
-      gameStarted = false; // Stop the game
-    }
-
-  
-
-  } else {
+      
+    } else {
 
     //tells the player to press the button so it starts 
     tft.setCursor(50, 150);
@@ -159,36 +157,36 @@ void loop() {
 
     tft.setCursor(50, 180);
     tft.print("to start/restart the game.");
-  }
-
+    }
 }
 
 //the function that gets called inside of the interrupt (by using this function we dont need to check if the button is pressed everytime in the main loop, it gets checked everytime here inside the loop)
 void startGame() {
-    if (!gameStarted) { // Check if the game has not already started
-        gameStarted = true; // Set the gameStarted flag
-        score = 0; // Reset score
-        
-        // Set fixed starting position for Pac-Man (ensure it's a valid empty space)
-        pacManX = 1 * CELL_SIZE;  // Column 1 (second column)
-        pacManY = 1 * CELL_SIZE;  // Row 1 (second row)
+  gameStarted= true; 
+  score= 0 ; 
+  pacManX=0;
+  pacManY=0;
 
-        // Check that the starting position is not a wall (value 1 in the maze)
-        int row = pacManY / CELL_SIZE;
-        int col = pacManX / CELL_SIZE;
+  if(level==1){
 
-        ghostX = CELL_SIZE * 6; // Reset ghost's position
-        ghostY = CELL_SIZE * 4;
+    ghostX = CELL_SIZE * 6;
+    ghostY = CELL_SIZE * 4;
 
-        // Clear the screen to remove any text or graphics
-        tft.fillScreen(BLACK);
+  } else if (level==2){
 
-        // Draw the initial maze and characters
-        drawMaze();
-        drawPacman();
-        
-        Serial.println("Game Started!");
-    }
+    ghostX = CELL_SIZE * 6;
+    ghostY = CELL_SIZE * 4;
+
+    ghostTwoX = CELL_SIZE * 5;
+    ghostTwoX = CELL_SIZE * 4;
+
+  }
+
+   // Draw the initial maze and characters
+    drawMaze();
+    drawPacman();   
+    Serial.println("Game Started!");
+    
 }
 
 
@@ -248,11 +246,20 @@ void clearOut(){
 //drawing the ghost
 void drawGhost(){
   tft.fillCircle(ghostX + CELL_SIZE / 2 , ghostY + CELL_SIZE / 2 , CELL_SIZE/3 , MAGENTA); //The ghost is a circle as well:(
+
+  if (level == 2) {
+        tft.fillCircle(ghostTwoX + CELL_SIZE / 2, ghostTwoY + CELL_SIZE / 2, CELL_SIZE / 3, MAGENTA);
+  }
 }
 
 //clearing out the ghost
 void clearGhost(){
   tft.fillCircle(ghostX + CELL_SIZE / 2 , ghostY + CELL_SIZE / 2 , CELL_SIZE/3 , BLACK);
+
+  
+  if (level == 2) {
+        tft.fillCircle(ghostTwoX + CELL_SIZE / 2, ghostTwoY + CELL_SIZE / 2, CELL_SIZE / 3,BLACK);
+  }
 }
 
 //now we want to move the ghost in 4 random directions, in given intervals (the random function generates a random number between 0 to 3 each time and then we assign a specific movement to each number ) 
@@ -262,53 +269,77 @@ void clearGhost(){
 unsigned int lastMoveTimeGhost=0;
 const int ghostMoveInterval= 500; //we can always change this but I think it makes sense
 
-void moveGhost(){
+void moveGhost() {
 
-  unsigned int currentTimeGhost = millis();
+    unsigned int currentTimeGhost = millis();
 
-  if(currentTimeGhost-lastMoveTimeGhost > ghostMoveInterval ){
-  
-  clearGhost(); //clearing the maze so we dont end up having two ghosts
+    if(currentTimeGhost - lastMoveTimeGhost > ghostMoveInterval) {
 
-  int newGhostX = ghostX;
-  int newGhostY = ghostY;
+        clearGhost(); //clearing the maze so we dont end up having two ghosts
 
-  int direction = random(4); //0=up 1= down 2= right 3=left /(-1) is there because we count from 0 / it should not be 1, 1 is wall in the maze!
+        int newGhostX = ghostX;
+        int newGhostY = ghostY;
 
-   int ghostCol = ghostX / CELL_SIZE; //ghosts col 
-   int ghostRow = ghostY / CELL_SIZE; //ghosts row
+        int direction = random(4); //0=up 1= down 2= right 3=left /(-1) is there because we count from 0 / it should not be 1, 1 is wall in the maze!
 
-   if(direction==0){
+        if(direction == 0) {
+            newGhostY -= CELL_SIZE;
 
-    newGhostY-= CELL_SIZE;
+        } else if(direction == 1) {
+            newGhostY += CELL_SIZE;
 
-   } else if(direction==1){
+        } else if(direction == 2) {
+            newGhostX += CELL_SIZE;
 
-     newGhostY+= CELL_SIZE;
+        } else if(direction == 3) {
+            newGhostX -= CELL_SIZE;
 
-   } else if(direction==2){
+        }
 
-     newGhostX+= CELL_SIZE;
+        int newRow = newGhostY / CELL_SIZE;
+        int newCol = newGhostX / CELL_SIZE;
 
-   } else if(direction==3){
-
-     newGhostX-= CELL_SIZE;
-   }
-
-   int newRow = newGhostY / CELL_SIZE;
-   int newCol = newGhostX / CELL_SIZE;
-
-
-   if (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS) {
+        if (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS) {
             if (maze[newRow][newCol] != 1) {  // 1 is the wall
                 // Update ghost position if not a wall
                 ghostX = newGhostX;
                 ghostY = newGhostY;
             }
+        }
+
+        //if we are in the second level then we add ghost two 
+        if(level == 2) {
+            int newGhostTwoX = ghostTwoX;
+            int newGhostTwoY = ghostTwoY;
+            int direction = random(4); //0=up 1= down 2= right 3=left /(-1) is there because we count from 0 / it should not be 1, 1 is wall in the maze!
+
+            if(direction == 0) {
+                newGhostTwoY -= CELL_SIZE;
+
+            } else if(direction == 1) {
+                newGhostTwoY += CELL_SIZE;
+
+            } else if(direction == 2) {
+                newGhostTwoX += CELL_SIZE;
+
+            } else if(direction == 3) {
+                newGhostTwoX -= CELL_SIZE;
+
+            }
+
+            int newRowTwo = newGhostTwoY / CELL_SIZE;
+            int newColTwo = newGhostTwoX / CELL_SIZE;
+            if (newRowTwo >= 0 && newRowTwo < ROWS && newColTwo >= 0 && newColTwo < COLS) {
+                if (maze[newRowTwo][newColTwo] != 1) {  // 1 is the wall
+                    // Update ghost position if not a wall
+                    ghostTwoX = newGhostTwoX;
+                    ghostTwoY = newGhostTwoY;
+                }
+            }
+        }
     }
-  drawGhost();
-  lastMoveTimeGhost = currentTimeGhost;
-  }
+    drawGhost();
+    lastMoveTimeGhost = currentTimeGhost;
 }
 
  
@@ -316,7 +347,7 @@ void moveGhost(){
 //deteccting collision
 
 void checkGhostCollision() {
-  if (pacManX == ghostX && pacManY == ghostY) {
+  if ((pacManX == ghostX && pacManY == ghostY) ||( level == 2 && pacManX == ghostTwoX && pacManY == ghostTwoY)) {
     // Play lose sound
     tft.fillScreen(BLACK);
     tft.setCursor(180, 100);
@@ -405,13 +436,27 @@ void movePacWJoy() {
 //checking if you won the game: 
 
 bool wonGame() {
-    for (int i = 0; i < ROWS; i++) {
+ for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
             if (maze[i][j] == 2) {
                 return false; 
             }
         }
     }
+    
+    //if you havent leveled up yet, you level up, else the final message pops off
+    if(level==1){
+      level = 2; 
+      startGame();
+    } else {
+       tft.fillScreen(BLACK);
+        tft.setCursor(50, 150);
+        tft.setTextColor(GREEN);
+        tft.setTextSize(2);
+        tft.print("You Win!");
+        gameStarted = false; // End game on win
+    }
+
     return true; 
 }
 
