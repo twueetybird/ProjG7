@@ -182,6 +182,13 @@ void startGame() {
 
   }
 
+   tone(SPEAKER, 440, 200); // A4 for 200ms
+   delay(250);              // Wait a bit
+   tone(SPEAKER, 660, 200); // E5 for 200ms
+   delay(250);              // Wait a bit
+   tone(SPEAKER, 880, 300); // A5 for 300ms
+
+
    // Draw the initial maze and characters
     drawMaze();
     drawPacman();   
@@ -348,7 +355,10 @@ void moveGhost() {
 
 void checkGhostCollision() {
   if ((pacManX == ghostX && pacManY == ghostY) ||( level == 2 && pacManX == ghostTwoX && pacManY == ghostTwoY)) {
-    // Play lose sound
+    tone(SPEAKER, 220, 500); // A3 for 500ms (low pitch)
+    delay(500);              // Wait
+    tone(SPEAKER, 110, 1000); // A2 for 1 second (even lower pitch)
+
     tft.fillScreen(BLACK);
     tft.setCursor(180, 100);
     tft.setTextColor(RED);
