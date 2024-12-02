@@ -126,6 +126,8 @@ void loop() {
 
     // Update second lcd
     lcd.setCursor(0, 1);
+    lcd.print("                "); //clear the line
+    lcd.setCursor(0, 1);
     lcd.print("Score: ");
     lcd.print(score);
   }
