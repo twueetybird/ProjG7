@@ -508,8 +508,19 @@ bool wonGame() {
         }
   }
 
-  return true;
+  if(level==1){
+    level = 2; 
+    startGame();
+  } else {
+
+    tft.fillScreen(BLACK);
+    tft.setCursor(50, 150);
+    tft.setTextColor(GREEN);
+    tft.setTextSize(2);
+    tft.print("You Win!");
+    gameStarted = false; // End game on win
+  }
+    return true; 
     
 
 }
-
