@@ -166,7 +166,7 @@ void startGame() {
   } else if (level == 2) {
     ghostX = CELL_SIZE * 6;
     ghostY = CELL_SIZE * 4;
-    ghostTwoX = CELL_SIZE * 5;
+    ghostTwoX = CELL_SIZE * 6;
     ghostTwoY = CELL_SIZE * 4;
   }
 
