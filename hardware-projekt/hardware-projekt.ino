@@ -130,6 +130,14 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("Score: ");
     lcd.print(score);
+
+      
+    tft.setCursor(20, 300);
+    tft.setTextColor(WHITE);
+    tft.setTextSize(2);
+    tft.print("Level:");
+    tft.print(level);
+  
   }
 
 }
