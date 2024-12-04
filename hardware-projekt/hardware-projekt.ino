@@ -19,7 +19,7 @@ LiquidCrystal lcd(25, 27, 35, 33, 31, 29);
 #define WHITE 0xFFFF
 #define CELL_SIZE 40
 
-//game starting 
+//initialize object variables
 int pacManX = 0, pacManY = 0;               
 int ghostX = CELL_SIZE * 6, ghostY = CELL_SIZE * 4;    
 int ghostTwoX =CELL_SIZE * 5 , ghostTwoY=CELL_SIZE * 4;                  
@@ -49,8 +49,8 @@ unsigned long gameStartTime = 0;
 int totalPellets = 0;
 int maxPossibleScore = 1000;
 
+//piezzo buzzer
 const int BUZZER = 53;
-
 #define BUZZER 53
 
 //maze
@@ -134,7 +134,7 @@ void loop() {
 
 }
 
-//this used to be in the loop but I moved here, cause it makes the code easier to read
+//debouncing method
 void handleButtonDebounce() {
     
   int currentButtonState = digitalRead(buttonPin);
@@ -154,6 +154,7 @@ void handleButtonDebounce() {
     lastButtonState = currentButtonState;
 }
 
+//start game method
 void startGame() {
   gameStarted = true;
   score = 0;
@@ -199,12 +200,14 @@ void startGame() {
     }
   }
 
+// buzzer sound at game start
   tone(BUZZER, 440, 200);
   delay(250);
   tone(BUZZER, 660, 200);
   delay(250);
   tone(BUZZER, 880, 300);
 
+//refresh screen to start game
   tft.setRotation(3);
   tft.fillScreen(BLACK);
   drawMaze();
@@ -237,8 +240,9 @@ void drawPacman(){
   tft.fillCircle(pacManX + CELL_SIZE / 2 , pacManY + CELL_SIZE / 2 , 10 , YELLOW);
 }
 
+//clearing out pacman
 void clearOut(){
-  tft.fillCircle(pacManX + CELL_SIZE / 2, pacManY + CELL_SIZE / 2, 10, BLACK);  // Clearing the small circle
+  tft.fillCircle(pacManX + CELL_SIZE / 2, pacManY + CELL_SIZE / 2, 10, BLACK);  
 }
 
 void drawGhost() {
@@ -507,7 +511,7 @@ bool wonGame() {
             }
         }
   }
-
+// if you completed level 1, initiate level 2
   if(level==1){
     level = 2; 
     startGame();
