@@ -409,8 +409,6 @@ void gameWon() {
   tft.setTextSize(2);
   tft.print("You Win!");
   tft.setCursor(50, 180);
-  tft.print("Score: ");
-  tft.print(score);
   
   gameStarted = false; // End game on win
   
@@ -525,11 +523,8 @@ bool wonGame() {
     startGame();
   } else {
 
-    tft.fillScreen(BLACK);
-    tft.setCursor(50, 150);
-    tft.setTextColor(GREEN);
-    tft.setTextSize(2);
-    tft.print("You Win!");
+ gameWon();
+      
     gameStarted = false; // End game on win
   }
     return true; 
